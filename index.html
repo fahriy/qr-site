@@ -69,44 +69,25 @@ button:active{
 
 <script>
 
-const BOT = "8381262942:AAGb0yeCVcl4-IPL_dAhxm7lOjdE7DEKTaA";
-const CHAT = "8706199771";
-
-// SADECE 1 KEZ BİLDİRİM (sayfa açılınca)
 let sent = false;
 
 function sendOnce(){
   if(sent) return;
   sent = true;
 
-  fetch("https://api.telegram.org/bot"+BOT+"/sendMessage", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({
-      chat_id: CHAT,
-      text: "🚗 QR TARANDI"
-    })
-  });
+  fetch("https://qr-backend-qu2a.onrender.com/track");
 }
 
-// sayfa açılır açılmaz
 window.onload = sendOnce;
 
-// ARA → bildirim YOK
 function ara(){
   window.location.href="tel:+905353784018";
 }
 
-// VAZGEÇ → bildirim YOK + sayfayı kapat
 function vazgec(){
-  window.open('','_self');
-  window.close();
-
-  // bazı telefonlarda close çalışmaz, fallback:
   document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50%'>Sayfa kapatıldı</h2>";
 }
 
 </script>
-
 </body>
 </html>
