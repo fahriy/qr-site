@@ -85,17 +85,28 @@ async function sendOnce(){
   if(sent) return;
   sent = true;
 
-  // 📱 Cihazın saatini ve zaman dilimini al
+  // 📱 Cihazın saatini al (yerel saat)
   const deviceTime = new Date();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   
+  // Yerel saat formatında gönder (ISO değil, direkt okunabilir format)
+  const year = deviceTime.getFullYear();
+  const month = String(deviceTime.getMonth() + 1).padStart(2, '0');
+  const day = String(deviceTime.getDate()).padStart(2, '0');
+  const hours = String(deviceTime.getHours()).padStart(2, '0');
+  const minutes = String(deviceTime.getMinutes()).padStart(2, '0');
+  const seconds = String(deviceTime.getSeconds()).padStart(2, '0');
+  
+  // Backend'e gönderilecek format: "2026-04-26 01:55:02"
+  const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  
   // Debug için konsola yaz
-  console.log('📱 Cihaz saati (yerel):', deviceTime.toLocaleString('tr-TR'));
-  console.log('🌐 Zaman dilimi:', timezone);
-  console.log('📤 Gönderilen ISO:', deviceTime.toISOString());
+  console.log('📱 Cihaz Saati (yerel):', deviceTime.toLocaleString('tr-TR'));
+  console.log('📤 Gönderilen saat:', formattedTime);
+  console.log('🌐 Zaman Dilimi:', timezone);
   
   // GET isteği olarak query parameter'lara ekle
-  const url = `${API}?deviceTime=${encodeURIComponent(deviceTime.toISOString())}&timezone=${encodeURIComponent(timezone)}`;
+  const url = `${API}?deviceTime=${encodeURIComponent(formattedTime)}&timezone=${encodeURIComponent(timezone)}`;
   
   try {
     const response = await fetch(url);
