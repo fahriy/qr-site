@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR</title>
+</head>
+
+<body style="text-align:center;font-family:Arial;margin-top:80px;">
+
+<h2>🚗 Araç Sistemi</h2>
+
+<button onclick="ara()">📞 ARA</button>
+<button onclick="vazgec()">❌ VAZGEÇ</button>
+
+<script>
+
+const BOT = "BOT_TOKEN";
+const CHAT = "CHAT_ID";
+
+function send(){
+  fetch("https://api.telegram.org/bot"+BOT+"/sendMessage", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      chat_id: CHAT,
+      text: "🚗 QR TARANDI"
+    })
+  });
+}
+
+function ara(){
+  send();
+  window.location.href="tel:+905XXXXXXXXX";
+}
+
+function vazgec(){
+  send();
+  alert("İptal edildi");
+}
+
+window.onload = send;
+
+</script>
+
+</body>
+</html>
