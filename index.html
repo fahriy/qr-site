@@ -31,6 +31,11 @@ h2{
   margin-bottom:20px;
 }
 
+p{
+  margin-bottom:20px;
+  color:#ccc;
+}
+
 button{
   width:100%;
   padding:15px;
@@ -39,6 +44,7 @@ button{
   border:none;
   border-radius:12px;
   cursor:pointer;
+  transition: transform 0.2s;
 }
 
 .call{
@@ -83,15 +89,18 @@ async function sendOnce(){
   const deviceTime = new Date();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   
+  // Debug için konsola yaz
+  console.log('📱 Cihaz saati (yerel):', deviceTime.toLocaleString('tr-TR'));
+  console.log('🌐 Zaman dilimi:', timezone);
+  console.log('📤 Gönderilen ISO:', deviceTime.toISOString());
+  
   // GET isteği olarak query parameter'lara ekle
   const url = `${API}?deviceTime=${encodeURIComponent(deviceTime.toISOString())}&timezone=${encodeURIComponent(timezone)}`;
   
   try {
     const response = await fetch(url);
     if (response.ok) {
-      console.log('✅ Bilgiler gönderildi');
-      console.log('📱 Cihaz Saati:', deviceTime.toLocaleString('tr-TR'));
-      console.log('🌐 Zaman Dilimi:', timezone);
+      console.log('✅ Bilgiler başarıyla gönderildi');
     } else {
       console.log('❌ Gönderme hatası:', response.status);
     }
