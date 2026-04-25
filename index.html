@@ -79,31 +79,28 @@ async function sendOnce(){
   if(sent) return;
   sent = true;
 
-  // 📱 Cihazın saatini ve bilgilerini al
+  // 📱 Cihazın saatini ve zaman dilimini al
   const deviceTime = new Date();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   
+  // GET isteği olarak query parameter'lara ekle
+  const url = `${API}?deviceTime=${encodeURIComponent(deviceTime.toISOString())}&timezone=${encodeURIComponent(timezone)}`;
+  
   try {
-    // Backend'e POST isteği gönder
-    const response = await fetch(API, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        deviceTime: deviceTime.toISOString(),
-        timezone: timezone
-      })
-    });
-    
+    const response = await fetch(url);
     if (response.ok) {
-      console.log('Bilgiler gönderildi');
+      console.log('✅ Bilgiler gönderildi');
+      console.log('📱 Cihaz Saati:', deviceTime.toLocaleString('tr-TR'));
+      console.log('🌐 Zaman Dilimi:', timezone);
+    } else {
+      console.log('❌ Gönderme hatası:', response.status);
     }
   } catch(err) {
-    console.log('Gönderme hatası:', err);
+    console.log('❌ Bağlantı hatası:', err);
   }
 }
 
+// Sayfa yüklendiğinde çalıştır
 window.onload = sendOnce;
 
 function ara(){
@@ -113,6 +110,7 @@ function ara(){
 function vazgec(){
   window.open('','_self');
   window.close();
+  // Bazı tarayıcılarda close çalışmazsa:
   document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50%'>Sayfa kapatıldı</h2>";
 }
 
