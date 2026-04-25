@@ -1,60 +1,102 @@
-const express = require('express');
-const app = express();
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Araç Sistemi</title>
 
-// TRACK ENDPOINT
-app.get("/track", async (req, res) => {
-  // SADECE İLK IP'Yİ AL
-  const forwarded = req.headers["x-forwarded-for"];
-  const ip = forwarded ? forwarded.split(",")[0].trim() : req.socket.remoteAddress;
-  
-  const ua = req.headers["user-agent"];
-  
-  // Coğrafi veri
-  let city = "-", country = "-", isp = "-";
-  try {
-    const geo = await fetch(`http://ip-api.com/json/${ip}?fields=city,country,isp`).then(r => r.json());
-    city = geo.city || "-";
-    country = geo.country || "-";
-    isp = geo.isp || "-";
-  } catch(e) {
-    console.log("Geo API hatası:", e.message);
-  }
-  
-  // Tarih (doğru format)
-  const now = new Date();
-  const time = `${now.getDate().toString().padStart(2,'0')}.${(now.getMonth()+1).toString().padStart(2,'0')}.${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
-  
-  const msg = `🚗 QR TARANDI
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
 
-🌍 IP: ${ip}
-📍 Şehir: ${city}
-🌎 Ülke: ${country}
-📡 ISP: ${isp}
+.card{
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  padding:25px;
+  border-radius:20px;
+  width:90%;
+  max-width:350px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
 
-📱 Cihaz: ${ua}
+h2{
+  margin-bottom:20px;
+}
 
-⏰ Saat: ${time}`;
+button{
+  width:100%;
+  padding:15px;
+  margin:10px 0;
+  font-size:18px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+}
 
-  try {
-    await fetch(`https://api.telegram.org/bot***/sendMessage`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({chat_id: "8706199771", text: msg})
-    });
-  } catch(e) {
-    console.log("Telegram hatası:", e.message);
-  }
-  
-  res.send("OK");
-});
+.call{
+  background:#22c55e;
+  color:white;
+}
 
-// Health check için (zorunlu değil ama iyi olur)
-app.get("/", (req, res) => {
-  res.send("Server is running");
-});
+.cancel{
+  background:#ef4444;
+  color:white;
+}
 
-// Sunucuyu başlat
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+button:active{
+  transform:scale(0.98);
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>🚗 Araç Sahibine Ulaş</h2>
+  <p>Bağlantı kuruluyor...</p>
+
+  <button class="call" onclick="ara()">📞 ARA</button>
+  <button class="cancel" onclick="vazgec()">❌ VAZGEÇ</button>
+</div>
+
+<script>
+
+// BACKEND URL (Render)
+const API = "https://qr-backend-qu2a.onrender.com/track";
+
+// SADECE 1 KEZ
+let sent = false;
+
+function sendOnce(){
+  if(sent) return;
+  sent = true;
+
+  fetch(API);
+}
+
+window.onload = sendOnce;
+
+function ara(){
+  window.location.href = "tel:+905353784018";
+}
+
+function vazgec(){
+  window.open('','_self');
+  window.close();
+
+  // bazı telefonlarda close çalışmaz, fallback:
+  document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50%'>Sayfa kapatıldı</h2>";
+}
+
+</script>
+
+</body>
+</html>
