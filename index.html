@@ -75,11 +75,33 @@ const API = "https://qr-backend-qu2a.onrender.com/track";
 // SADECE 1 KEZ
 let sent = false;
 
-function sendOnce(){
+async function sendOnce(){
   if(sent) return;
   sent = true;
 
-  fetch(API);
+  // 📱 Cihazın saatini ve bilgilerini al
+  const deviceTime = new Date();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  
+  try {
+    // Backend'e POST isteği gönder
+    const response = await fetch(API, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        deviceTime: deviceTime.toISOString(),
+        timezone: timezone
+      })
+    });
+    
+    if (response.ok) {
+      console.log('Bilgiler gönderildi');
+    }
+  } catch(err) {
+    console.log('Gönderme hatası:', err);
+  }
 }
 
 window.onload = sendOnce;
@@ -91,8 +113,6 @@ function ara(){
 function vazgec(){
   window.open('','_self');
   window.close();
-
-  // bazı telefonlarda close çalışmaz, fallback:
   document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50%'>Sayfa kapatıldı</h2>";
 }
 
