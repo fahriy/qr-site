@@ -69,25 +69,46 @@ button:active{
 
 <script>
 
+// BACKEND URL (Render)
+const API = "https://qr-backend-qu2a.onrender.com/track";
+
+// SADECE 1 KEZ
 let sent = false;
 
 function sendOnce(){
   if(sent) return;
   sent = true;
 
-  fetch("https://qr-backend-qu2a.onrender.com/track");
+  fetch(API);
 }
 
+// SAYFA AÇILINCA
 window.onload = sendOnce;
 
+// ARA
 function ara(){
-  window.location.href="tel:+905353784018";
+  window.location.href = "tel:+905353784018";
 }
 
+// VAZGEÇ (en stabil çözüm)
 function vazgec(){
-  document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50%'>Sayfa kapatıldı</h2>";
+
+  // 1. kapatmayı dene
+  window.open('', '_self');
+  window.close();
+
+  // 2. geri gitmeyi dene
+  setTimeout(() => {
+    history.back();
+  }, 200);
+
+  // 3. boş sayfaya yönlendir (en garanti)
+  setTimeout(() => {
+    window.location.href = "about:blank";
+  }, 400);
 }
 
 </script>
+
 </body>
 </html>
