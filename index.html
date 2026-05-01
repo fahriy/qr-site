@@ -25,7 +25,7 @@
     padding: 20px;
   }
 
-  /* Hareketli arka plan ışığı */
+  /* Hareketli arka plan */
   body::before {
     content: '';
     position: fixed;
@@ -33,7 +33,7 @@
     left: -20%;
     width: 150%;
     height: 150%;
-    background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.1), transparent 70%);
+    background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.12), transparent 70%);
     pointer-events: none;
     animation: slowDrift 14s infinite alternate;
     z-index: 0;
@@ -41,7 +41,23 @@
 
   @keyframes slowDrift {
     0% { opacity: 0.3; transform: translate(0%, 0%) scale(1); }
-    100% { opacity: 0.6; transform: translate(3%, 2%) scale(1.05); }
+    100% { opacity: 0.7; transform: translate(3%, 2%) scale(1.05); }
+  }
+
+  /* Arka plan partikülleri */
+  .particle {
+    position: fixed;
+    background: rgba(59,130,246,0.15);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: particleUp 12s infinite linear;
+  }
+
+  @keyframes particleUp {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    20% { opacity: 0.4; }
+    100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
   }
 
   /* Ana kart */
@@ -56,7 +72,7 @@
     box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(59,130,246,0.15);
     z-index: 10;
     position: relative;
-    animation: cardFadeIn 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    animation: cardFadeIn 0.5s ease-out;
   }
 
   @keyframes cardFadeIn {
@@ -64,9 +80,8 @@
     100% { opacity: 1; transform: scale(1) translateY(0); }
   }
 
-  /* Araç ikonu animasyonu */
   .vehicle-icon {
-    font-size: 56px;
+    font-size: 58px;
     display: inline-block;
     filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
     margin-bottom: 12px;
@@ -101,7 +116,6 @@
     margin-bottom: 20px;
   }
 
-  /* Durum paneli - sade */
   .status-panel {
     background: rgba(0, 0, 0, 0.35);
     border-radius: 20px;
@@ -118,7 +132,6 @@
     letter-spacing: 0.3px;
   }
 
-  /* Butonlar */
   button {
     width: 100%;
     padding: 15px 16px;
@@ -132,10 +145,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     font-family: inherit;
-    position: relative;
-    overflow: hidden;
   }
 
   .btn-call {
@@ -144,8 +155,8 @@
     box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
   }
 
-  .btn-call:hover { background: #16a34a; transform: translateY(-1px); }
-  .btn-call:active { transform: translateY(2px); }
+  .btn-call:hover { background: #16a34a; transform: translateY(-2px); }
+  .btn-call:active { transform: translateY(1px); }
 
   .btn-callback {
     background: #3b82f6;
@@ -153,37 +164,18 @@
     box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
   }
 
-  .btn-callback:hover { background: #2563eb; transform: translateY(-1px); }
-  .btn-callback:active { transform: translateY(2px); }
+  .btn-callback:hover { background: #2563eb; transform: translateY(-2px); }
+  .btn-callback:active { transform: translateY(1px); }
 
   .btn-cancel {
     background: #ef4444;
     color: white;
   }
 
-  .btn-cancel:hover { background: #dc2626; transform: translateY(-1px); }
-  .btn-cancel:active { transform: translateY(2px); }
+  .btn-cancel:hover { background: #dc2626; transform: translateY(-2px); }
+  .btn-cancel:active { transform: translateY(1px); }
 
-  /* Ripple efekti */
-  .ripple-effect {
-    position: fixed;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-    pointer-events: none;
-    transform: scale(0);
-    opacity: 0.6;
-    z-index: 9999;
-    animation: rippleClean 0.5s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
-  }
-
-  @keyframes rippleClean {
-    0% { transform: scale(0.2); opacity: 0.5; }
-    100% { transform: scale(7); opacity: 0; }
-  }
-
-  /* MODAL FORM */
+  /* MODAL */
   .modal-overlay {
     position: fixed;
     top: 0;
@@ -291,7 +283,6 @@
     color: #e2e8f0;
   }
 
-  /* Bilgi mesajı sayfası */
   .info-page {
     display: flex;
     flex-direction: column;
@@ -347,15 +338,9 @@
     <div class="status-message">📡 Bağlantı kuruluyor...</div>
   </div>
 
-  <button class="btn-call" id="callBtn">
-    <span>📞</span> ARAÇ SAHİBİNİ ARA <span>→</span>
-  </button>
-  <button class="btn-callback" id="callbackBtn">
-    <span>🔄</span> ARAÇ SAHİBİ BENİ ARASIN <span>←</span>
-  </button>
-  <button class="btn-cancel" id="cancelBtn">
-    <span>✕</span> VAZGEÇ <span>⎯</span>
-  </button>
+  <button class="btn-call" id="callBtn">📞 ARAÇ SAHİBİNİ ARA</button>
+  <button class="btn-callback" id="callbackBtn">🔄 ARAÇ SAHİBİ BENİ ARASIN</button>
+  <button class="btn-cancel" id="cancelBtn">❌ VAZGEÇ</button>
 </div>
 
 <!-- MODAL FORM -->
@@ -377,111 +362,114 @@
 </div>
 
 <script>
-  // ========== BACKEND URL (Render) - AYNI YAPI ==========
+  // ========== BACKEND URL ==========
   const API = "https://qr-backend-qu2a.onrender.com/track";
   const OWNER_PHONE = "+905353784018";
   
-  // Sayfa açılışında 1 kez gönderildi mi?
   let pageSent = false;
-  // Kullanıcı bilgileri gönderildi mi (form için)
-  let userInfoSent = false;
+
+  // ========== PARTİKÜLLER ==========
+  function createParticles() {
+    for (let i = 0; i < 30; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 8 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = Math.random() * 10 + 6 + 's';
+      particle.style.animationDelay = Math.random() * 8 + 's';
+      document.body.appendChild(particle);
+      setTimeout(() => particle.remove(), 12000);
+    }
+    setInterval(() => {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 8 + 2;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = Math.random() * 10 + 6 + 's';
+      document.body.appendChild(particle);
+      setTimeout(() => particle.remove(), 12000);
+    }, 3000);
+  }
+
+  // ========== ZAMAN FORMATI (backend'in beklediği format) ==========
+  function getFormattedTime() {
+    const deviceTime = new Date();
+    const year = deviceTime.getFullYear();
+    const month = String(deviceTime.getMonth() + 1).padStart(2, '0');
+    const day = String(deviceTime.getDate()).padStart(2, '0');
+    const hours = String(deviceTime.getHours()).padStart(2, '0');
+    const minutes = String(deviceTime.getMinutes()).padStart(2, '0');
+    const seconds = String(deviceTime.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  function getTimezone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  }
 
   // ========== 1. SAYFA AÇILINCA BİLGİ GÖNDER (QR TARANDI) ==========
   async function sendOnce() {
     if (pageSent) return;
     pageSent = true;
 
-    const deviceTime = new Date();
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const deviceTime = getFormattedTime();
+    const timezone = getTimezone();
     
-    const year = deviceTime.getFullYear();
-    const month = String(deviceTime.getMonth() + 1).padStart(2, '0');
-    const day = String(deviceTime.getDate()).padStart(2, '0');
-    const hours = String(deviceTime.getHours()).padStart(2, '0');
-    const minutes = String(deviceTime.getMinutes()).padStart(2, '0');
-    const seconds = String(deviceTime.getSeconds()).padStart(2, '0');
+    console.log('📤 [SAYFA AÇILDI] Gönderiliyor...');
+    console.log('   ⏰ Saat:', deviceTime);
+    console.log('   🌐 Zaman Dilimi:', timezone);
     
-    const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    
-    console.log('📱 Cihaz Saati (yerel):', deviceTime.toLocaleString('tr-TR'));
-    console.log('📤 Gönderilen saat:', formattedTime);
-    console.log('🌐 Zaman Dilimi:', timezone);
-    
-    // Orijinal yapıdaki gibi GET isteği
-    const url = `${API}?deviceTime=${encodeURIComponent(formattedTime)}&timezone=${encodeURIComponent(timezone)}&event=qr_scanned`;
+    // Backend'in beklediği parametreler
+    const url = `${API}?deviceTime=${encodeURIComponent(deviceTime)}&timezone=${encodeURIComponent(timezone)}`;
     
     try {
       const response = await fetch(url);
       if (response.ok) {
-        console.log('✅ Sayfa açılış bildirimi gönderildi');
+        console.log('✅ [BAŞARILI] QR tarandı bildirimi gönderildi');
       } else {
-        console.log('❌ Gönderme hatası:', response.status);
+        console.log('❌ [HATA] HTTP:', response.status);
       }
     } catch(err) {
-      console.log('❌ Bağlantı hatası:', err);
+      console.log('❌ [HATA] Bağlantı hatası:', err.message);
     }
   }
 
-  // ========== 2. KULLANICI BİLGİLERİNİ GÖNDER (TAMAM BUTONU) ==========
+  // ========== 2. KULLANICI BİLGİLERİNİ GÖNDER (ARANMA TALEBİ) ==========
   async function sendUserInfo(name, phone) {
-    const deviceTime = new Date();
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const deviceTime = getFormattedTime();
+    const timezone = getTimezone();
     
-    const year = deviceTime.getFullYear();
-    const month = String(deviceTime.getMonth() + 1).padStart(2, '0');
-    const day = String(deviceTime.getDate()).padStart(2, '0');
-    const hours = String(deviceTime.getHours()).padStart(2, '0');
-    const minutes = String(deviceTime.getMinutes()).padStart(2, '0');
-    const seconds = String(deviceTime.getSeconds()).padStart(2, '0');
+    console.log('📤 [ARANMA TALEBİ] Gönderiliyor...');
+    console.log('   👤 Ad Soyad:', name);
+    console.log('   📱 Telefon:', phone);
+    console.log('   ⏰ Saat:', deviceTime);
     
-    const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    
-    console.log('📞 Kullanıcı bilgileri gönderiliyor...');
-    console.log('👤 Ad Soyad:', name);
-    console.log('📱 Telefon:', phone);
-    console.log('⏰ Zaman:', formattedTime);
-    
-    // Kullanıcı bilgilerini de ekleyerek GET isteği
-    const url = `${API}?deviceTime=${encodeURIComponent(formattedTime)}&timezone=${encodeURIComponent(timezone)}&event=callback_request&user_name=${encodeURIComponent(name)}&user_phone=${encodeURIComponent(phone)}&owner_phone=${encodeURIComponent(OWNER_PHONE)}&action=beni_ara`;
+    // Tüm bilgileri query parameter olarak ekle
+    const url = `${API}?deviceTime=${encodeURIComponent(deviceTime)}&timezone=${encodeURIComponent(timezone)}&user_name=${encodeURIComponent(name)}&user_phone=${encodeURIComponent(phone)}&owner_phone=${encodeURIComponent(OWNER_PHONE)}&action=beni_ara`;
     
     try {
       const response = await fetch(url);
       if (response.ok) {
-        console.log('✅ Kullanıcı bilgileri başarıyla gönderildi');
+        console.log('✅ [BAŞARILI] Kullanıcı bilgileri gönderildi');
         return true;
       } else {
-        console.log('❌ Kullanıcı bilgileri gönderme hatası:', response.status);
+        console.log('❌ [HATA] HTTP:', response.status);
         return false;
       }
     } catch(err) {
-      console.log('❌ Bağlantı hatası:', err);
+      console.log('❌ [HATA] Bağlantı hatası:', err.message);
       return false;
     }
   }
 
-  // ========== BİLGİ MESAJI GÖSTER (5 saniye) ==========
-  function showInfoMessage(message, subMessage) {
-    document.body.innerHTML = `
-      <div class="info-page">
-        <div class="info-icon">✅</div>
-        <div class="info-title">${message}</div>
-        <div class="info-text">${subMessage || ''}</div>
-      </div>
-    `;
-    
-    // 5 saniye sonra sayfayı kapatmayı dene
-    setTimeout(() => {
-      window.open('', '_self');
-      window.close();
-    }, 5000);
-  }
-
-  // ========== MODAL KONTROLLERİ ==========
+  // ========== MODAL FONKSİYONLARI ==========
   const modal = document.getElementById('callbackModal');
   const modalFullName = document.getElementById('modalFullName');
   const modalPhone = document.getElementById('modalPhoneNumber');
-  const confirmBtn = document.getElementById('modalConfirmBtn');
-  const cancelModalBtn = document.getElementById('modalCancelBtn');
 
   function openModal() {
     modalFullName.value = '';
@@ -493,136 +481,95 @@
     modal.classList.remove('active');
   }
 
-  async function submitCallbackForm() {
+  async function submitForm() {
     const fullName = modalFullName.value.trim();
     const userPhone = modalPhone.value.trim();
     
     if (!fullName) {
-      console.log('⚠️ Ad Soyad boş');
+      console.log('⚠️ Ad Soyad giriniz');
       return;
     }
     if (!userPhone || userPhone.length < 9) {
-      console.log('⚠️ Telefon numarası geçersiz');
+      console.log('⚠️ Geçerli bir telefon numarası giriniz');
       return;
     }
     
-    // Bilgileri backend'e gönder
+    // Backend'e gönder
     await sendUserInfo(fullName, userPhone);
     
     // Modal'ı kapat
     closeModal();
     
-    // Bilgi mesajı göster (5 saniye)
-    showInfoMessage('Araç sahibi sizi arayacak', 'En kısa sürede size dönüş yapılacaktır');
+    // Bilgi mesajı göster
+    document.body.innerHTML = `
+      <div class="info-page">
+        <div class="info-icon">✅</div>
+        <div class="info-title">Araç sahibi sizi arayacak</div>
+        <div class="info-text">En kısa sürede size dönüş yapılacaktır</div>
+      </div>
+    `;
+    
+    // 5 saniye sonra kapatmayı dene
+    setTimeout(() => {
+      window.open('', '_self');
+      window.close();
+    }, 5000);
   }
 
-  // ========== DİĞER AKSİYONLAR ==========
-  function callOwner() {
-    console.log('📞 Araç sahibi aranıyor:', OWNER_PHONE);
-    window.location.href = `tel:${OWNER_PHONE}`;
+  // ========== AKSİYONLAR ==========
+  function ara() {
+    console.log('📞 [ARAMA] Araç sahibi aranıyor:', OWNER_PHONE);
+    window.location.href = "tel:+905353784018";
   }
 
-  function cancelPage() {
-    console.log('❌ Sayfa kapatılıyor');
+  function vazgec() {
+    console.log('❌ [KAPAT] Sayfa kapatılıyor');
     window.open('', '_self');
     window.close();
     document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50%'>Sayfa kapatıldı</h2>";
   }
 
-  // Ripple efekti
-  function createRipple(clientX, clientY) {
-    const ripple = document.createElement('div');
-    ripple.classList.add('ripple-effect');
-    ripple.style.left = (clientX - 16) + 'px';
-    ripple.style.top = (clientY - 16) + 'px';
-    document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 500);
-  }
-
-  // ========== BUTON BAĞLAMA ==========
-  function bindButtons() {
-    const callBtn = document.getElementById('callBtn');
-    const callbackBtn = document.getElementById('callbackBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    
-    if (callBtn) {
-      const newCall = callBtn.cloneNode(true);
-      callBtn.parentNode.replaceChild(newCall, callBtn);
-      newCall.id = 'callBtn';
-      newCall.addEventListener('click', (e) => {
-        e.preventDefault();
-        const rect = newCall.getBoundingClientRect();
-        createRipple(rect.left + rect.width/2, rect.top + rect.height/2);
-        callOwner();
-      });
-    }
-    
-    if (callbackBtn) {
-      const newCallback = callbackBtn.cloneNode(true);
-      callbackBtn.parentNode.replaceChild(newCallback, callbackBtn);
-      newCallback.id = 'callbackBtn';
-      newCallback.addEventListener('click', (e) => {
-        e.preventDefault();
-        const rect = newCallback.getBoundingClientRect();
-        createRipple(rect.left + rect.width/2, rect.top + rect.height/2);
-        openModal();
-      });
-    }
-    
-    if (cancelBtn) {
-      const newCancel = cancelBtn.cloneNode(true);
-      cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
-      newCancel.id = 'cancelBtn';
-      newCancel.addEventListener('click', (e) => {
-        e.preventDefault();
-        const rect = newCancel.getBoundingClientRect();
-        createRipple(rect.left + rect.width/2, rect.top + rect.height/2);
-        cancelPage();
-      });
-    }
-  }
-
-  function bindModalButtons() {
-    if (confirmBtn) {
-      const newConfirm = confirmBtn.cloneNode(true);
-      confirmBtn.parentNode.replaceChild(newConfirm, confirmBtn);
-      newConfirm.addEventListener('click', async (e) => {
-        e.preventDefault();
-        await submitCallbackForm();
-      });
-    }
-    
-    if (cancelModalBtn) {
-      const newCancelModal = cancelModalBtn.cloneNode(true);
-      cancelModalBtn.parentNode.replaceChild(newCancelModal, cancelModalBtn);
-      newCancelModal.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeModal();
-      });
-    }
-    
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-  }
-
-  function attachTouchRipple() {
-    const btns = document.querySelectorAll('button');
-    btns.forEach(btn => {
-      btn.addEventListener('touchstart', (e) => {
-        const touch = e.touches[0];
-        createRipple(touch.clientX, touch.clientY);
-      });
-    });
-  }
-
   // ========== SAYFA YÜKLENİNCE ==========
-  window.onload = () => {
-    bindButtons();
-    bindModalButtons();
-    attachTouchRipple();
-    sendOnce();  // Sayfa açılır açılmaz bildirim gönder (QR tarandı)
-    console.log('🚀 Sistem aktif - QR tarandı bildirimi gönderildi');
+  window.onload = function() {
+    // Arka plan efektleri
+    createParticles();
+    
+    // SAYFA AÇILINCA BİLDİRİM GÖNDER (en önemli kısım)
+    sendOnce();
+    
+    // Butonları bağla
+    document.getElementById('callBtn').onclick = function(e) {
+      e.preventDefault();
+      ara();
+    };
+    
+    document.getElementById('callbackBtn').onclick = function(e) {
+      e.preventDefault();
+      openModal();
+    };
+    
+    document.getElementById('cancelBtn').onclick = function(e) {
+      e.preventDefault();
+      vazgec();
+    };
+    
+    // Modal butonları
+    document.getElementById('modalConfirmBtn').onclick = function(e) {
+      e.preventDefault();
+      submitForm();
+    };
+    
+    document.getElementById('modalCancelBtn').onclick = function(e) {
+      e.preventDefault();
+      closeModal();
+    };
+    
+    // Modal dışına tıklayınca kapat
+    modal.onclick = function(e) {
+      if (e.target === modal) closeModal();
+    };
+    
+    console.log('🚀 Sistem hazır - Sayfa açıldı, bildirim gönderilecek');
   };
 </script>
 </body>
