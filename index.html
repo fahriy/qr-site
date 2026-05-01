@@ -1,95 +1,422 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Araç Sistemi</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🐾 Tatlı Bağlantı | Araç Sistemi</title>
 
 <style>
-body{
-  margin:0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-.card{
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  padding:25px;
-  border-radius:20px;
-  width:90%;
-  max-width:350px;
-  text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, 'Poppins', sans-serif;
+    background: linear-gradient(145deg, #0b1120 0%, #1a2639 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+  }
 
-h2{
-  margin-bottom:20px;
-}
+  /* tatlı arka plan hareketli ışıltılar */
+  body::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08), transparent 70%);
+    animation: softGlow 18s infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-p{
-  margin-bottom:20px;
-  color:#ccc;
-}
+  @keyframes softGlow {
+    0% { opacity: 0.3; transform: translate(0%, 0%) scale(1); }
+    100% { opacity: 0.8; transform: translate(5%, 3%) scale(1.05); }
+  }
 
-button{
-  width:100%;
-  padding:15px;
-  margin:10px 0;
-  font-size:18px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  transition: transform 0.2s;
-}
+  /* tatlı baloncuklar (bubble animation) */
+  .bubble {
+    position: absolute;
+    bottom: -60px;
+    background: rgba(255, 220, 150, 0.2);
+    border-radius: 50%;
+    pointer-events: none;
+    backdrop-filter: blur(3px);
+    animation: riseBubble linear infinite;
+    z-index: 0;
+  }
 
-.call{
-  background:#22c55e;
-  color:white;
-}
+  @keyframes riseBubble {
+    0% {
+      transform: translateY(0) scale(0.8);
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateY(-120vh) scale(1.2);
+      opacity: 0;
+    }
+  }
 
-.cancel{
-  background:#ef4444;
-  color:white;
-}
+  /* ana kart - tatlı bounce-in */
+  .card {
+    background: rgba(22, 34, 48, 0.6);
+    backdrop-filter: blur(18px);
+    border-radius: 56px;
+    padding: 30px 24px 36px;
+    width: 90%;
+    max-width: 380px;
+    text-align: center;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+    animation: floatGlow 3s infinite alternate, cardPop 0.55s cubic-bezier(0.34, 1.2, 0.64, 1);
+    z-index: 10;
+    position: relative;
+  }
 
-button:active{
-  transform:scale(0.98);
-}
+  @keyframes cardPop {
+    0% {
+      opacity: 0;
+      transform: scale(0.88) translateY(30px);
+    }
+    70% {
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes floatGlow {
+    0% {
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 245, 200, 0.1);
+      transform: translateY(0px);
+    }
+    100% {
+      box-shadow: 0 35px 55px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(255, 210, 120, 0.3);
+      transform: translateY(-5px);
+    }
+  }
+
+  /* tatlı araba emojisi dönüşü */
+  .car-icon {
+    font-size: 65px;
+    display: inline-block;
+    animation: sweetBounce 1.8s infinite ease;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+    margin-bottom: 8px;
+  }
+
+  @keyframes sweetBounce {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(3deg); }
+  }
+
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #FFF5E0, #FFD895);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin: 8px 0 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .sub {
+    font-size: 0.9rem;
+    color: #b9cdff;
+    background: rgba(255,255,210,0.12);
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 60px;
+    backdrop-filter: blur(4px);
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+
+  p {
+    font-size: 0.98rem;
+    color: #dfe9ff;
+    margin-bottom: 28px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 48px;
+    padding: 12px 12px;
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* buton tatlılık */
+  button {
+    width: 100%;
+    padding: 16px 12px;
+    margin: 12px 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
+  }
+
+  .call {
+    background: #2ecc71;
+    color: white;
+    text-shadow: 0 1px 0 #1f8f4b;
+    box-shadow: 0 7px 0 #1b7943;
+  }
+
+  .cancel {
+    background: #f97316;
+    color: #fff5e6;
+    text-shadow: 0 1px 0 #c2410c;
+    box-shadow: 0 7px 0 #b45309;
+  }
+
+  button:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  /* tatlı click efekti (spline) */
+  .btn-click-effect {
+    position: fixed;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffe5b4, #ffb347);
+    pointer-events: none;
+    transform: scale(0);
+    opacity: 0.8;
+    z-index: 999;
+    animation: rippleFade 0.45s ease-out forwards;
+  }
+
+  @keyframes rippleFade {
+    0% {
+      transform: scale(0.2);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(7);
+      opacity: 0;
+    }
+  }
+
+  /* bağlantı kuruluyor animasyonu (nokta dansı) */
+  .connecting-dots span {
+    display: inline-block;
+    animation: dotPulse 1.4s infinite;
+    font-size: 1.3rem;
+  }
+
+  .connecting-dots span:nth-child(1) { animation-delay: 0s; }
+  .connecting-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .connecting-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dotPulse {
+    0%, 60%, 100% { transform: translateY(0px); opacity: 0.5; }
+    30% { transform: translateY(-4px); opacity: 1; text-shadow: 0 0 5px #ffcf7a; }
+  }
+
+  /* ekstra tatlılık: küçük pati izi */
+  .paw-print {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    font-size: 28px;
+    opacity: 0.2;
+    transform: rotate(-10deg);
+    z-index: 1;
+    pointer-events: none;
+    animation: pawWave 6s infinite alternate;
+  }
+
+  @keyframes pawWave {
+    0% { opacity: 0.1; transform: translateX(0px) rotate(-10deg);}
+    100% { opacity: 0.35; transform: translateX(-8px) rotate(5deg);}
+  }
+
+  /* mobil uyumluluk */
+  @media (max-width: 450px) {
+    .card {
+      padding: 24px 18px 30px;
+    }
+    h2 {
+      font-size: 1.6rem;
+    }
+    button {
+      padding: 14px 10px;
+      font-size: 1.1rem;
+    }
+    .car-icon {
+      font-size: 55px;
+    }
+  }
+
+  /* bildirim toast için (gönderme başarılı) */
+  .toast-tatli {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    background: #1e2a3aee;
+    backdrop-filter: blur(12px);
+    color: #ffefcf;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #ffcd86;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 200;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .toast-tatli.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    animation: toastPop 0.3s ease-out;
+  }
+
+  @keyframes toastPop {
+    0% { opacity: 0; transform: translateX(-50%) scale(0.85);}
+    80% { transform: translateX(-50%) scale(1.02);}
+    100% { opacity: 1; transform: translateX(-50%) scale(1);}
+  }
 </style>
 </head>
-
 <body>
 
-<div class="card">
-  <h2>🚗 Araç Sahibine Ulaş</h2>
-  <p>Bağlantı kuruluyor...</p>
+<!-- arka plan baloncukları (çok tatlı) -->
+<div id="bubble-container" style="position:fixed; top:0; left:0; width:100%; height:100%; overflow:hidden; pointer-events:none; z-index:0;"></div>
+<div class="paw-print">🐾✨</div>
 
-  <button class="call" onclick="ara()">📞 ARA</button>
-  <button class="cancel" onclick="vazgec()">❌ VAZGEÇ</button>
+<div class="card">
+  <div class="car-icon">🚗💨</div>
+  <h2> tatlı sürücü</h2>
+  <div class="sub">⭐ anında bağlantı ⭐</div>
+  
+  <p>
+    <span>🔮</span> 
+    <span class="connecting-dots">Bağlantı kuruluyor<span>.</span><span>.</span><span>.</span></span>
+    <span>🌸</span>
+  </p>
+
+  <button class="call" id="callBtn">📞  ARA SAHİBİ  🎀</button>
+  <button class="cancel" id="cancelBtn">🍃  VAZGEÇ  ✨</button>
 </div>
 
 <script>
+// ---------- TATLI ANİMASYONLAR VE BUBBLE MAKİNESİ ----------
+function createSweetBubbles() {
+  const container = document.getElementById('bubble-container');
+  if (!container) return;
+  const bubbleCount = 20;
+  for (let i = 0; i < bubbleCount; i++) {
+    let bubble = document.createElement('div');
+    bubble.classList.add('bubble');
+    const size = Math.random() * 30 + 12;
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    bubble.style.left = Math.random() * 100 + '%';
+    bubble.style.animationDuration = Math.random() * 7 + 5 + 's';
+    bubble.style.animationDelay = Math.random() * 8 + 's';
+    bubble.style.background = `radial-gradient(circle, rgba(255, 200, 140, 0.3), rgba(255, 160, 70, 0.1))`;
+    container.appendChild(bubble);
+  }
+  // ara sıra yeni baloncuk ekle
+  setInterval(() => {
+    if (container.children.length < 35) {
+      let fresh = document.createElement('div');
+      fresh.classList.add('bubble');
+      let size = Math.random() * 28 + 10;
+      fresh.style.width = size + 'px';
+      fresh.style.height = size + 'px';
+      fresh.style.left = Math.random() * 100 + '%';
+      fresh.style.animationDuration = Math.random() * 6 + 4 + 's';
+      fresh.style.background = `radial-gradient(circle, rgba(255, 215, 150, 0.4), rgba(255, 140, 50, 0.15))`;
+      container.appendChild(fresh);
+      setTimeout(() => { if(fresh && fresh.remove) fresh.remove(); }, 11000);
+    }
+  }, 3200);
+}
 
-// BACKEND URL (Render)
+// Ripple efekti (her tıklamada tatlı patlama)
+function createRippleEffect(event, elementRect) {
+  let x, y;
+  if (event.touches) {
+    // mobil dokunma
+    const touch = event.touches[0];
+    x = touch.clientX;
+    y = touch.clientY;
+  } else {
+    x = event.clientX;
+    y = event.clientY;
+  }
+  const ripple = document.createElement('div');
+  ripple.classList.add('btn-click-effect');
+  ripple.style.left = (x - 14) + 'px';
+  ripple.style.top = (y - 14) + 'px';
+  document.body.appendChild(ripple);
+  setTimeout(() => {
+    if (ripple && ripple.remove) ripple.remove();
+  }, 450);
+}
+
+// tatlı toast bildirimi
+function showSweetToast(message, emoji = "🍬") {
+  let existingToast = document.querySelector('.toast-tatli');
+  if(existingToast) existingToast.remove();
+  const toast = document.createElement('div');
+  toast.className = 'toast-tatli';
+  toast.innerHTML = `${emoji}  ${message}  ✨`;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('show');
+  }, 10);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => { if(toast && toast.remove) toast.remove(); }, 300);
+  }, 2300);
+}
+
+//--------- BACKEND ENTEGRASYON (Render) ----------
 const API = "https://qr-backend-qu2a.onrender.com/track";
-
-// SADECE 1 KEZ
 let sent = false;
 
-async function sendOnce(){
-  if(sent) return;
+async function sendOnce() {
+  if (sent) return;
   sent = true;
 
-  // 📱 Cihazın saatini al (yerel saat)
   const deviceTime = new Date();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   
-  // Yerel saat formatında gönder (ISO değil, direkt okunabilir format)
   const year = deviceTime.getFullYear();
   const month = String(deviceTime.getMonth() + 1).padStart(2, '0');
   const day = String(deviceTime.getDate()).padStart(2, '0');
@@ -97,43 +424,204 @@ async function sendOnce(){
   const minutes = String(deviceTime.getMinutes()).padStart(2, '0');
   const seconds = String(deviceTime.getSeconds()).padStart(2, '0');
   
-  // Backend'e gönderilecek format: "2026-04-26 01:55:02"
   const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   
-  // Debug için konsola yaz
-  console.log('📱 Cihaz Saati (yerel):', deviceTime.toLocaleString('tr-TR'));
-  console.log('📤 Gönderilen saat:', formattedTime);
-  console.log('🌐 Zaman Dilimi:', timezone);
+  console.log('📱 Tatlı saat (yerel):', deviceTime.toLocaleString('tr-TR'));
+  console.log('📤 Gönderilen:', formattedTime);
+  console.log('🌍 Zaman dilimi:', timezone);
   
-  // GET isteği olarak query parameter'lara ekle
   const url = `${API}?deviceTime=${encodeURIComponent(formattedTime)}&timezone=${encodeURIComponent(timezone)}`;
   
   try {
     const response = await fetch(url);
     if (response.ok) {
-      console.log('✅ Bilgiler başarıyla gönderildi');
+      console.log('✅ Başarılı gönderim 🍬');
+      showSweetToast("Bağlantı notu iletildi 🍭", "📡");
     } else {
-      console.log('❌ Gönderme hatası:', response.status);
+      console.log('⚠️ Sunucu yanıtı:', response.status);
+      showSweetToast("Bağlantı hafif takıldı ama tamam 💖", "🌀");
     }
   } catch(err) {
-    console.log('❌ Bağlantı hatası:', err);
+    console.log('❌ Ağ hatası (tatlı kalın):', err);
+    showSweetToast("Yine de harikasın! 💕", "🍬");
   }
 }
 
-// Sayfa yüklendiğinde çalıştır
-window.onload = sendOnce;
-
-function ara(){
-  window.location.href = "tel:+905353784018";
+// buton fonksiyonları + animasyon dokunuşu
+function ara() {
+  // tatlı tıklama efekti
+  const btn = document.getElementById('callBtn');
+  const rect = btn.getBoundingClientRect();
+  // yapay event ile efekt oluştur
+  const fakeEvent = { clientX: rect.left + rect.width/2, clientY: rect.top + rect.height/2 };
+  createRippleEffect(fakeEvent, rect);
+  
+  // ekstra pati efekti: butonun üzerine kısa bir nabız
+  btn.style.transform = "scale(0.97)";
+  setTimeout(() => { btn.style.transform = ""; }, 120);
+  
+  // tatlı ses yok ama görsel mutluluk
+  showSweetToast("Aranıyor 🎶 lütfen bekleyin", "📞");
+  
+  setTimeout(() => {
+    window.location.href = "tel:+905353784018";
+  }, 80);
 }
 
-function vazgec(){
-  window.open('','_self');
-  window.close();
-  // Bazı tarayıcılarda close çalışmazsa:
-  document.body.innerHTML = "<h2 style='color:white;text-align:center;margin-top:50%'>Sayfa kapatıldı</h2>";
+function vazgec() {
+  const btnCancel = document.getElementById('cancelBtn');
+  const rect = btnCancel.getBoundingClientRect();
+  const fakeCancelEvent = { clientX: rect.left + rect.width/2, clientY: rect.top + rect.height/2 };
+  createRippleEffect(fakeCancelEvent, rect);
+  
+  btnCancel.style.transform = "scale(0.96)";
+  setTimeout(() => { btnCancel.style.transform = ""; }, 120);
+  
+  showSweetToast("Görüşmek üzere 🍃 kal sağlıkla", "🌸");
+  
+  setTimeout(() => {
+    // tatlı kapanma denemesi
+    window.open('', '_self');
+    window.close();
+    document.body.innerHTML = `
+      <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; background:linear-gradient(145deg, #0f172a, #1e293b); color:#ffefcf; text-align:center; font-family:system-ui;">
+        <div style="font-size:82px; animation: bounceTiny 1s infinite;">🐣✨</div>
+        <h2 style="margin-top:20px;">Sayfa usulca kapandı</h2>
+        <p style="margin-top:12px;">çok tatlı bir vedaydı 🍬</p>
+      </div>
+      <style>
+        @keyframes bounceTiny {
+          0%,100%{transform:translateY(0px);}
+          50%{transform:translateY(-12px);}
+        }
+      </style>
+    `;
+  }, 300);
 }
 
+// Metin animasyonu: Bağlantı kuruluyor... tatlı degistirme
+function animateConnectingText() {
+  const containerSpan = document.querySelector('.connecting-dots');
+  if (!containerSpan) return;
+  const messages = ["Bağlantı koklanıyor 🐾", "Sinyal tatlı 📡", "Araç bulunuyor 🚗✨", "Hazırlanıyor 🎀", "Bağlantı kuruluyor"];
+  let idx = 0;
+  setInterval(() => {
+    if (!document.body.contains(containerSpan)) return;
+    const dotsSpan = containerSpan.querySelectorAll('span');
+    // ana metni değiştir ama noktaları koru? daha tatlı yapalım, sadece metin kısmını değiştir
+    let currentMsg = messages[idx % messages.length];
+    // içeriği düzenle: noktalar kalsın
+    containerSpan.innerHTML = currentMsg + `<span>.</span><span>.</span><span>.</span>`;
+    idx++;
+  }, 2800);
+}
+
+// bütün buton click dinleyicilerini güncelleme (temiz bağlama)
+function bindButtons() {
+  const callButton = document.getElementById('callBtn');
+  const cancelButton = document.getElementById('cancelBtn');
+  if (callButton) {
+    // önceki eventleri temizleme
+    const newCall = callButton.cloneNode(true);
+    callButton.parentNode.replaceChild(newCall, callButton);
+    newCall.id = 'callBtn';
+    newCall.addEventListener('click', (e) => {
+      e.stopPropagation();
+      ara();
+    });
+  }
+  const newCancel = document.getElementById('cancelBtn');
+  if (newCancel) {
+    const freshCancel = newCancel.cloneNode(true);
+    newCancel.parentNode.replaceChild(freshCancel, newCancel);
+    freshCancel.id = 'cancelBtn';
+    freshCancel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      vazgec();
+    });
+  }
+}
+
+// sayfa yüklenince her şey başlasın
+window.onload = () => {
+  createSweetBubbles();        // arka plan baloncukları
+  sendOnce();                  // 1 kere backend'e saat bilgisi
+  bindButtons();              // tatlı butonlar
+  animateConnectingText();    // metin animasyonu
+  
+  // ekstra olarak card üzerinde dalgalanma efekti (tatlı hover)
+  const card = document.querySelector('.card');
+  if(card) {
+    card.addEventListener('click', (e) => {
+      // sadece card boşluğuna tıklanırsa minimal etki yap, butonlara çakışmasın
+      if(e.target === card || e.target.classList?.contains('card') || e.target.closest('.card') && !e.target.closest('button')) {
+        const rippleDiv = document.createElement('div');
+        rippleDiv.style.position = 'fixed';
+        rippleDiv.style.left = e.clientX - 15 + 'px';
+        rippleDiv.style.top = e.clientY - 15 + 'px';
+        rippleDiv.style.width = '30px';
+        rippleDiv.style.height = '30px';
+        rippleDiv.style.background = 'radial-gradient(circle, #ffd966, #ffb347)';
+        rippleDiv.style.borderRadius = '50%';
+        rippleDiv.style.pointerEvents = 'none';
+        rippleDiv.style.animation = 'rippleFade 0.5s ease-out forwards';
+        document.body.appendChild(rippleDiv);
+        setTimeout(() => rippleDiv.remove(), 500);
+      }
+    });
+  }
+  
+  // ekstra tatlılık: mobilde force dokunma destekli
+  if ('ontouchstart' in window) {
+    const btns = document.querySelectorAll('button');
+    btns.forEach(btn => {
+      btn.addEventListener('touchstart', (e) => {
+        const rectBtn = btn.getBoundingClientRect();
+        const touchX = e.touches[0].clientX;
+        const touchY = e.touches[0].clientY;
+        const rippleDiv = document.createElement('div');
+        rippleDiv.classList.add('btn-click-effect');
+        rippleDiv.style.left = (touchX - 14) + 'px';
+        rippleDiv.style.top = (touchY - 14) + 'px';
+        document.body.appendChild(rippleDiv);
+        setTimeout(() => rippleDiv.remove(), 430);
+      });
+    });
+  }
+  
+  // ufak bir karşılama toast'ı : tatlı sürpriz
+  setTimeout(() => {
+    showSweetToast("Hoş geldin tatlı misafir 🍬", "🎀");
+  }, 800);
+};
+
+// hareketli arka plan baloncuklarını temizleme periyodu (çok şişmesin)
+setInterval(() => {
+  const container = document.getElementById('bubble-container');
+  if(container && container.children.length > 45) {
+    while(container.children.length > 30) {
+      container.removeChild(container.firstChild);
+    }
+  }
+}, 15000);
+
+// CSS eksik animasyon tanımını ekle (güvence)
+if(!document.querySelector('#style-extra-animation')) {
+  const styleAdd = document.createElement('style');
+  styleAdd.id = 'style-extra-animation';
+  styleAdd.innerText = `
+    @keyframes tinyWobble {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(2deg); }
+      75% { transform: rotate(-2deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .call:active, .cancel:active {
+      animation: tinyWobble 0.1s ease-in-out;
+    }
+  `;
+  document.head.appendChild(styleAdd);
+}
 </script>
 
 </body>
