@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Araç Sistemi | Profesyonel</title>
+<title>Araç Sistemi</title>
 
 <style>
   * {
@@ -238,7 +238,8 @@
     margin-bottom: 18px;
   }
 
-  .modal-input-group input {
+  .modal-input-group input,
+  .modal-input-group textarea {
     width: 100%;
     padding: 14px 16px;
     background: rgba(0, 0, 0, 0.5);
@@ -249,14 +250,21 @@
     font-family: inherit;
     outline: none;
     transition: 0.2s;
+    resize: vertical;
   }
 
-  .modal-input-group input:focus {
+  .modal-input-group textarea {
+    min-height: 80px;
+  }
+
+  .modal-input-group input:focus,
+  .modal-input-group textarea:focus {
     border-color: #22c55e;
     box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
   }
 
-  .modal-input-group input::placeholder {
+  .modal-input-group input::placeholder,
+  .modal-input-group textarea::placeholder {
     color: #5f739b;
   }
 
@@ -332,10 +340,10 @@
 <div class="card">
   <div class="vehicle-icon">🚗⚡</div>
   <h2>ARAÇ SAHİBİNE ULAŞ</h2>
-  <div class="vehicle-id">PLAKA> 34 HGE 02</div>
+  <div class="vehicle-id">PLAKA · 34 TR 0784</div>
 
   <div class="status-panel">
-    <div class="status-message">📡 Bağlantı yapmanız bekleniyor...</div>
+    <div class="status-message">📡 İletişim bekleniyor</div>
   </div>
 
   <button class="btn-call" id="callBtn">📞 ARAÇ SAHİBİNİ ARA</button>
@@ -349,10 +357,13 @@
     <h3>📋 İletişim Bilgileri</h3>
     <div class="modal-sub">Araç sahibi sizi arayacak</div>
     <div class="modal-input-group">
-      <input type="text" id="modalFullName" placeholder="Ad Soyad" autocomplete="name">
+      <input type="text" id="modalFullName" placeholder="İsim" autocomplete="name">
     </div>
     <div class="modal-input-group">
-      <input type="tel" id="modalPhoneNumber" placeholder="Telefon Numaranız" autocomplete="tel">
+      <input type="tel" id="modalPhoneNumber" placeholder="Telefon" autocomplete="tel">
+    </div>
+    <div class="modal-input-group">
+      <textarea id="modalNote" placeholder="Not (isteğe bağlı)"></textarea>
     </div>
     <div class="modal-buttons">
       <button class="btn-modal-cancel" id="modalCancelBtn">VAZGEÇ</button>
@@ -365,8 +376,6 @@
   // ========== BACKEND URL ==========
   const API = "https://qr-backend-qu2a.onrender.com/track";
   const OWNER_PHONE = "+905353784018";
-  
-  let pageSent = false;
 
   // ========== PARTİKÜLLER ==========
   function createParticles() {
@@ -395,7 +404,7 @@
     }, 3000);
   }
 
-  // ========== ZAMAN FORMATI (backend'in beklediği format) ==========
+  // ========== ZAMAN FORMATI ==========
   function getFormattedTime() {
     const deviceTime = new Date();
     const year = deviceTime.getFullYear();
@@ -411,45 +420,19 @@
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
 
-  // ========== 1. SAYFA AÇILINCA BİLGİ GÖNDER (QR TARANDI) ==========
-  async function sendOnce() {
-    if (pageSent) return;
-    pageSent = true;
-
-    const deviceTime = getFormattedTime();
-    const timezone = getTimezone();
-    
-    console.log('📤 [SAYFA AÇILDI] Gönderiliyor...');
-    console.log('   ⏰ Saat:', deviceTime);
-    console.log('   🌐 Zaman Dilimi:', timezone);
-    
-    // Backend'in beklediği parametreler
-    const url = `${API}?deviceTime=${encodeURIComponent(deviceTime)}&timezone=${encodeURIComponent(timezone)}`;
-    
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        console.log('✅ [BAŞARILI] QR tarandı bildirimi gönderildi');
-      } else {
-        console.log('❌ [HATA] HTTP:', response.status);
-      }
-    } catch(err) {
-      console.log('❌ [HATA] Bağlantı hatası:', err.message);
-    }
-  }
-
-  // ========== 2. KULLANICI BİLGİLERİNİ GÖNDER (ARANMA TALEBİ) ==========
-  async function sendUserInfo(name, phone) {
+  // ========== KULLANICI BİLGİLERİNİ GÖNDER (ARANMA TALEBİ) ==========
+  async function sendUserInfo(name, phone, note) {
     const deviceTime = getFormattedTime();
     const timezone = getTimezone();
     
     console.log('📤 [ARANMA TALEBİ] Gönderiliyor...');
-    console.log('   👤 Ad Soyad:', name);
+    console.log('   👤 İsim:', name);
     console.log('   📱 Telefon:', phone);
+    console.log('   📝 Not:', note || '(boş)');
     console.log('   ⏰ Saat:', deviceTime);
     
     // Tüm bilgileri query parameter olarak ekle
-    const url = `${API}?deviceTime=${encodeURIComponent(deviceTime)}&timezone=${encodeURIComponent(timezone)}&user_name=${encodeURIComponent(name)}&user_phone=${encodeURIComponent(phone)}&owner_phone=${encodeURIComponent(OWNER_PHONE)}&action=beni_ara`;
+    const url = `${API}?isim=${encodeURIComponent(name)}&telefon=${encodeURIComponent(phone)}&not=${encodeURIComponent(note || '')}&islem=araç_sahibi_beni_arasin&cihaz_saati=${encodeURIComponent(deviceTime)}&zaman_dilimi=${encodeURIComponent(timezone)}`;
     
     try {
       const response = await fetch(url);
@@ -470,10 +453,12 @@
   const modal = document.getElementById('callbackModal');
   const modalFullName = document.getElementById('modalFullName');
   const modalPhone = document.getElementById('modalPhoneNumber');
+  const modalNote = document.getElementById('modalNote');
 
   function openModal() {
     modalFullName.value = '';
     modalPhone.value = '';
+    modalNote.value = '';
     modal.classList.add('active');
   }
 
@@ -484,9 +469,10 @@
   async function submitForm() {
     const fullName = modalFullName.value.trim();
     const userPhone = modalPhone.value.trim();
+    const userNote = modalNote.value.trim();
     
     if (!fullName) {
-      console.log('⚠️ Ad Soyad giriniz');
+      console.log('⚠️ İsim giriniz');
       return;
     }
     if (!userPhone || userPhone.length < 9) {
@@ -495,7 +481,7 @@
     }
     
     // Backend'e gönder
-    await sendUserInfo(fullName, userPhone);
+    await sendUserInfo(fullName, userPhone, userNote);
     
     // Modal'ı kapat
     closeModal();
@@ -534,9 +520,6 @@
     // Arka plan efektleri
     createParticles();
     
-    // SAYFA AÇILINCA BİLDİRİM GÖNDER (en önemli kısım)
-    sendOnce();
-    
     // Butonları bağla
     document.getElementById('callBtn').onclick = function(e) {
       e.preventDefault();
@@ -569,7 +552,7 @@
       if (e.target === modal) closeModal();
     };
     
-    console.log('🚀 Sistem hazır - Sayfa açıldı, bildirim gönderilecek');
+    console.log('🚀 Sistem hazır');
   };
 </script>
 </body>
