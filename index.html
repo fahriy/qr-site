@@ -340,7 +340,7 @@
 <div class="card">
   <div class="vehicle-icon">🚗⚡</div>
   <h2>ARAÇ SAHİBİNE ULAŞ</h2>
-  <div class="vehicle-id">PLAKA · 34 TR 0784</div>
+  <div class="vehicle-id">PLAKA: NON</div>
 
   <div class="status-panel">
     <div class="status-message">📡 İletişim bekleniyor</div>
@@ -407,9 +407,9 @@
   // ========== ZAMAN FORMATI ==========
   function getFormattedTime() {
     const deviceTime = new Date();
-    const year = deviceTime.getFullYear();
-    const month = String(deviceTime.getMonth() + 1).padStart(2, '0');
     const day = String(deviceTime.getDate()).padStart(2, '0');
+    const month = String(deviceTime.getMonth() + 1).padStart(2, '0');
+    const year = deviceTime.getFullYear();  
     const hours = String(deviceTime.getHours()).padStart(2, '0');
     const minutes = String(deviceTime.getMinutes()).padStart(2, '0');
     const seconds = String(deviceTime.getSeconds()).padStart(2, '0');
@@ -431,8 +431,7 @@
     console.log('   📝 Not:', note || '(boş)');
     console.log('   ⏰ Saat:', deviceTime);
     
-    // Tüm bilgileri query parameter olarak ekle
-    const url = `${API}?isim=${encodeURIComponent(name)}&telefon=${encodeURIComponent(phone)}&not=${encodeURIComponent(note || '')}&islem=araç_sahibi_beni_arasin&cihaz_saati=${encodeURIComponent(deviceTime)}&zaman_dilimi=${encodeURIComponent(timezone)}`;
+       const url = `${API}?isim=${encodeURIComponent(name)}&telefon=${encodeURIComponent(phone)}&not=${encodeURIComponent(note || '')}&islem=araç_sahibi_beni_arasin&cihaz_saati=${encodeURIComponent(deviceTime)}&zaman_dilimi=${encodeURIComponent(timezone)}`;
     
     try {
       const response = await fetch(url);
@@ -480,13 +479,11 @@
       return;
     }
     
-    // Backend'e gönder
+    
     await sendUserInfo(fullName, userPhone, userNote);
-    
-    // Modal'ı kapat
+     
     closeModal();
-    
-    // Bilgi mesajı göster
+        
     document.body.innerHTML = `
       <div class="info-page">
         <div class="info-icon">✅</div>
@@ -495,7 +492,7 @@
       </div>
     `;
     
-    // 5 saniye sonra kapatmayı dene
+    
     setTimeout(() => {
       window.open('', '_self');
       window.close();
@@ -517,10 +514,9 @@
 
   // ========== SAYFA YÜKLENİNCE ==========
   window.onload = function() {
-    // Arka plan efektleri
-    createParticles();
     
-    // Butonları bağla
+    createParticles();
+        
     document.getElementById('callBtn').onclick = function(e) {
       e.preventDefault();
       ara();
@@ -536,7 +532,7 @@
       vazgec();
     };
     
-    // Modal butonları
+    
     document.getElementById('modalConfirmBtn').onclick = function(e) {
       e.preventDefault();
       submitForm();
@@ -547,7 +543,7 @@
       closeModal();
     };
     
-    // Modal dışına tıklayınca kapat
+    
     modal.onclick = function(e) {
       if (e.target === modal) closeModal();
     };
